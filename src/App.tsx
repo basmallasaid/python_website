@@ -6,6 +6,8 @@ import { Lessons } from './pages/Lessons'
 import { LessonPage } from './pages/LessonPage'
 import { Practice } from './pages/Practice'
 import { Progress } from './pages/Progress'
+import { GamesHub } from './pages/GamesHub'
+import { GamePage } from './pages/GamePage'
 import { NotFound } from './pages/NotFound'
 
 export default function App() {
@@ -16,6 +18,8 @@ export default function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/lessons" element={<Lessons />} />
           <Route path="/lessons/:slug" element={<LessonPage />} />
+          <Route path="/games" element={<GamesHub />} />
+          <Route path="/games/:lessonId" element={<GamePage />} />
           <Route path="/practice" element={<Practice />} />
           <Route path="/progress" element={<Progress />} />
           <Route path="*" element={<NotFound />} />
