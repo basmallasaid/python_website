@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+﻿import { useCallback, useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check, Lightbulb, Target } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Gamepad2, Lightbulb, Target } from 'lucide-react'
 import { getLesson, lessons, nextLesson, prevLesson } from '../content/lessons/module1'
 import { useProgress } from '../context/ProgressContext'
 import { LESSON_ICONS } from '../components/layout/navConfig'
@@ -10,6 +10,7 @@ import { Badge } from '../components/ui/Badge'
 import { Card } from '../components/ui/Card'
 import { Playground } from '../components/code/Playground'
 import { LessonSectionBlock } from '../components/lesson/LessonSectionBlock'
+import { Exercises } from '../components/lesson/Exercises'
 import { Quiz } from '../components/lesson/Quiz'
 import { VariableLab } from '../components/lesson/VariableLab'
 
@@ -151,11 +152,72 @@ export function LessonPage() {
             </Card>
           </section>
 
+          {lesson.exercises && lesson.exercises.length > 0 ? (
+            <Exercises exercises={lesson.exercises} />
+          ) : null}
+
           <Quiz
             slug={slug}
             questions={lesson.quiz}
+            instantFeedback={lesson.instantQuiz}
             onFinish={(correct, total) => recordQuiz(slug, correct, total)}
           />
+
+          {lesson.gameSlug ? (
+            <section className="flex flex-col gap-4">
+              <h2 className="text-lg font-semibold text-ink-900">Games</h2>
+              <Card className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-start gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-python-50 text-python-600">
+                    <Gamepad2 className="size-5" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="font-semibold text-ink-900">Guess My Number</p>
+                    <p className="mt-0.5 text-sm text-ink-500">
+                      Play a quick game that uses input() and maths.
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  to={`/games/${lesson.gameSlug}`}
+                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-python-600 px-4 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-python-700"
+                >
+                  Play now
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              </Card>
+            </section>
+          ) : lesson.gameSlugs && lesson.gameSlugs.length > 0 ? (
+            <section className="flex flex-col gap-4">
+              <h2 className="text-lg font-semibold text-ink-900">Games</h2>
+              <div className="flex flex-col gap-3">
+                {lesson.gameSlugs.map((slug) => (
+                  <Card key={slug} className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-start gap-3">
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-python-50 text-python-600">
+                        <Gamepad2 className="size-5" aria-hidden="true" />
+                      </span>
+                      <div>
+                        <p className="font-semibold text-ink-900">
+                          {slug === 'lesson3-games' ? 'Lesson 3 Games: input() and Math' : 'Guess My Number'}
+                        </p>
+                        <p className="mt-0.5 text-sm text-ink-500">
+                          Play games that use input() and maths.
+                        </p>
+                      </div>
+                    </div>
+                    <Link
+                      to={`/games/${slug}`}
+                      className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-python-600 px-4 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-python-700"
+                    >
+                      Play now
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  </Card>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </div>
 
         {/* ---- Sticky practice panel ---- */}
@@ -233,3 +295,4 @@ export function LessonPage() {
     </div>
   )
 }
+

@@ -1,11 +1,8 @@
-import { lazy, type ComponentType } from 'react'
-import { Box, Printer, type LucideIcon } from 'lucide-react'
+﻿import { lazy, type ComponentType } from 'react'
+import { Box, Sparkles, Zap, type LucideIcon } from 'lucide-react'
 
 /**
  * One row = one playable lesson.
- *
- * The game component is lazy-loaded, so a lesson folder never costs anything
- * until a kid actually opens it. See ./README.md for the 3-step recipe.
  */
 export type GameLesson = {
   /** URL segment: /games/<id>. Folder name and lesson ids must match. */
@@ -22,6 +19,7 @@ export type GameLesson = {
 
 const PrintRobotGame = lazy(() => import('./lessons/01-print-robot/index'))
 const HeroBuilderGame = lazy(() => import('./lessons/02-hero-builder/index'))
+const Lesson3Games = lazy(() => import('./lessons/lesson3/index'))
 
 export const GAMES: GameLesson[] = [
   {
@@ -29,7 +27,7 @@ export const GAMES: GameLesson[] = [
     order: 1,
     title: 'Make the Robot Talk',
     description: 'Teach a robot to speak with print().',
-    icon: Printer,
+    icon: Zap,
     gradient: 'from-python-400 to-python-600',
     component: PrintRobotGame,
   },
@@ -41,6 +39,15 @@ export const GAMES: GameLesson[] = [
     icon: Box,
     gradient: 'from-sun-400 to-sun-600',
     component: HeroBuilderGame,
+  },
+  {
+    id: 'lesson3-games',
+    order: 3,
+    title: 'Lesson 3 Games: input() and Math',
+    description: 'Six fun games to practice input(), int(), and maths.',
+    icon: Sparkles,
+    gradient: 'from-indigo-400 to-indigo-600',
+    component: Lesson3Games,
   },
 ]
 
@@ -56,3 +63,9 @@ export function isLessonUnlocked(index: number, isComplete: (id: string) => bool
   if (index <= 0) return true
   return GAMES.slice(0, index).every((game) => isComplete(game.id))
 }
+
+
+
+
+
+

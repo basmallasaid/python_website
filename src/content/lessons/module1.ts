@@ -241,8 +241,160 @@ Use \`snake_case\` — lowercase words joined with underscores. That is the conv
     },
 
     {
-      slug: 'strings',
+      slug: 'input-and-math',
       order: 3,
+      title: 'Talking to the Computer',
+      subtitle: 'Ask questions with input() and do simple math',
+      minutes: 9,
+      icon: 'message',
+      xp: 60,
+      objectives: [
+        'Ask a question with `input()` and store the answer in a variable',
+        'Turn text into a number with `int()` before doing maths',
+        'Add, subtract, multiply and divide in Python',
+        'Print words and variables together with an f-string',
+      ],
+      sections: [
+        {
+          heading: 'Now the computer listens',
+          body: `Until now, our programs only talked. They printed words and then stopped.
+
+Now the computer will **ask questions** and listen to the answers. That is how we make programs that talk *with* people instead of just at them.`,
+        },
+        {
+          heading: 'Asking a question with input()',
+          body: `\`input()\` shows a question, then **waits**. It waits until the person types an answer and presses Enter. Whatever they type is handed back to your program.
+
+To keep the answer, put the call on the right side of an \`=\`.`,
+          code: 'name = input("What is your name? ")\nprint("Hello", name)',
+          output: { title: 'What happens?', text: 'What is your name? Sam\nHello Sam' },
+          list: [
+            '`"What is your name? "` is the question shown on the screen.',
+            'The answer is stored in the variable `name`.',
+            'Then `print("Hello", name)` uses it.',
+          ],
+          callout: {
+            tone: 'tip',
+            title: 'Leave a space',
+            body: 'End your question with a space — `"What is your name? "` — so the typing starts one space after the question mark.',
+          },
+        },
+        {
+          heading: 'Important rule: input() always gives text',
+          body: `This surprises almost everyone at first. Even when you type the number \`12\`, Python receives the **text** \`"12"\` — a string, just like in Lesson 2.
+
+You cannot do maths with text, so we use \`int()\` to turn it into a whole number.`,
+          code: 'age = int(input("How old are you? "))\nprint("Next year you will be", age + 1)',
+          output: { title: 'What happens?', text: 'How old are you? 13\nNext year you will be 14' },
+          callout: {
+            tone: 'warn',
+            title: 'Text versus number',
+            body: '`"5" + 1` breaks because `"5"` is text. `int("5") + 1` gives `6` because `int()` makes it a real number.',
+          },
+        },
+        {
+          heading: 'Math in Python',
+          body: 'Python can do maths right inside your program. These four symbols are the ones you will use every day.',
+          table: {
+            headers: ['Symbol', 'What it does', 'Example'],
+            rows: [
+              ['`+`', 'add', '`5 + 2` gives `7`'],
+              ['`-`', 'subtract', '`5 - 2` gives `3`'],
+              ['`*`', 'multiply', '`5 * 2` gives `10`'],
+              ['`/`', 'divide', '`5 / 2` gives `2.5`'],
+            ],
+          },
+          code: 'print(5 + 2)   # add\nprint(5 - 2)   # subtract\nprint(5 * 2)   # multiply\nprint(5 / 2)   # divide',
+          callout: {
+            tone: 'tip',
+            title: 'Extra (bonus!)',
+            body: '`//` gives the whole-number part of a division: `7 // 2` is `3`.\n\n`%` gives the leftover, called the remainder: `7 % 2` is `1`.\n\n`**` gives a power: `2 ** 3` is `8` (that is 2 × 2 × 2).',
+          },
+        },
+        {
+          heading: 'f-strings: a neat way to print',
+          body: `An **f-string** is text with a small \`f\` in front of the quotes. Inside the curly braces \`{ }\` you can put a variable, and Python swaps in its value.
+
+It is the easiest way to mix words and values on one line.`,
+          code: 'name = "Sam"\nage = 13\nprint(f"Hello {name}, you are {age} years old!")',
+          output: { title: 'What happens?', text: 'Hello Sam, you are 13 years old!' },
+        },
+      ],
+      playground: {
+        caption: 'Run it, then answer the question in the console.',
+        starter: 'name = input("What is your name? ")\nprint("Hello", name)\n',
+      },
+      challenge: {
+        prompt: 'Be a fortune teller for a moment.',
+        requirements: [
+          'Ask for the player’s age and store it as an `int`',
+          'Work out their age in ten years',
+          'Print `In 10 years you will be 23` for an input of 13',
+        ],
+        starter: 'age = int(input("How old are you? "))\n\n',
+        solution:
+          'age = int(input("How old are you? "))\nprint("In 10 years you will be", age + 10)\n',
+        checks: [
+          { label: 'Shows the question', expect: ['How old are you? '] },
+          { label: 'Shows the typed age', expect: ['› 13'] },
+          { label: 'Prints the future age', expect: ['In 10 years you will be 23'] },
+          { label: 'Runs without errors', expect: ['In 10 years you will be 23'], forbidError: true },
+        ],
+        hints: [
+          'Type 13 in the console when it asks your age.',
+          '`age + 10` adds ten to whatever number was typed.',
+        ],
+      },
+      exercises: [
+        {
+          title: 'Say hello',
+          prompt: 'Ask for the user’s name with `input()`, then print a greeting that includes it.',
+          hint: 'Save the answer in a variable, then use it inside `print()`.',
+          answer: 'name = input("What is your name? ")\nprint("Hello", name)',
+        },
+        {
+          title: 'Add and multiply',
+          prompt: 'Ask for two numbers. Print their **sum** and their **product**.',
+          hint: 'Wrap each `input()` in `int()` so you can do maths with the answers.',
+          answer:
+            'a = int(input("First number: "))\nb = int(input("Second number: "))\nprint("Sum:", a + b)\nprint("Product:", a * b)',
+        },
+        {
+          title: 'Five years from now',
+          prompt: 'Ask for the user’s age. Print how old they will be in **5** years.',
+          hint: 'Turn the answer into a number with `int()`, then add `5`.',
+          answer: 'age = int(input("How old are you? "))\nprint("In 5 years you will be", age + 5)',
+        },
+      ],
+      instantQuiz: true,
+      quiz: [
+        {
+          prompt: 'What does `input()` always give back?',
+          options: ['A number', 'Text (a string)', 'A picture', 'Nothing'],
+          answer: 1,
+          explanation:
+            'input() always gives text, even when the person types digits. Use int() to turn it into a number.',
+        },
+        {
+          prompt: 'Which function turns text into a whole number?',
+          options: ['`text()`', '`int()`', '`word()`', '`number()`'],
+          answer: 1,
+          explanation:
+            'int() converts text like "12" into the number 12 so you can do maths with it.',
+        },
+        {
+          prompt: 'What does `5 * 3` give?',
+          options: ['8', '2', '15', '53'],
+          answer: 2,
+          explanation: 'The `*` symbol means multiply, so 5 * 3 is 15.',
+        },
+      ],
+      gameSlugs: ['lesson3-games'],
+    },
+
+    {
+      slug: 'strings',
+      order: 4,
       title: 'Strings & Text',
       subtitle: 'Quotes, methods, and f-strings',
       minutes: 10,
@@ -362,7 +514,7 @@ Methods never change the original string. They return a new one, so you must eit
 
     {
       slug: 'numbers',
-      order: 4,
+      order: 5,
       title: 'Numbers & Math',
       subtitle: 'Integers, floats, and the operators you need',
       minutes: 11,
@@ -469,7 +621,7 @@ Parentheses always win. Reach for them whenever the default reading is not obvio
 
     {
       slug: 'input',
-      order: 5,
+      order: 6,
       title: 'User Input',
       subtitle: 'Ask a question, read the answer',
       minutes: 10,
@@ -583,7 +735,7 @@ To keep the value, put the call on the right side of an \`=\`.`,
 
     {
       slug: 'conditionals',
-      order: 6,
+      order: 7,
       title: 'Making Decisions',
       subtitle: 'if, elif, else and indentation',
       minutes: 12,
@@ -689,7 +841,7 @@ The colon at the end of the line opens a block, and the indented lines below it 
 
     {
       slug: 'loops',
-      order: 7,
+      order: 8,
       title: 'Loops',
       subtitle: 'for, while, range, break and continue',
       minutes: 13,
@@ -811,7 +963,7 @@ The condition is checked **before** each pass, so a \`while\` that is false from
 
     {
       slug: 'guessing-game',
-      order: 8,
+      order: 9,
       title: 'Project: Guessing Game',
       subtitle: 'Put the whole module together',
       minutes: 15,

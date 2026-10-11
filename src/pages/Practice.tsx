@@ -39,6 +39,119 @@ const DRILLS: Drill[] = [
     ],
   },
   {
+    id: 'hello-name',
+    topic: 'input',
+    prompt: 'Ask for the player’s name with input(), then print "Hello" followed by the name.',
+    starter: '',
+    solution: 'name = input("What is your name? ")\nprint("Hello", name)\n',
+    checks: [
+      { label: 'Asks for the name', expect: ['What is your name? '] },
+      { label: 'Runs without errors', expect: ['What is your name? '], forbidError: true },
+    ],
+  },
+  {
+    id: 'favorite-color',
+    topic: 'input',
+    prompt: 'Ask for the player’s favorite color, then print "Your favorite color is <color>" using an f-string.',
+    starter: '',
+    solution: 'color = input("What is your favorite color? ")\nprint(f"Your favorite color is {color}")\n',
+    checks: [
+      { label: 'Asks for the color', expect: ['What is your favorite color? '] },
+      { label: 'Runs without errors', expect: ['What is your favorite color? '], forbidError: true },
+    ],
+  },
+  {
+    id: 'age-next-year',
+    topic: 'input',
+    prompt: 'Ask for the player’s age with int(), then print how old they will be next year.',
+    starter: '',
+    solution: 'age = int(input("How old are you? "))\nprint("Next year you will be", age + 1)\n',
+    checks: [
+      { label: 'Asks for the age', expect: ['How old are you? '] },
+      { label: 'Runs without errors', expect: ['How old are you? '], forbidError: true },
+    ],
+  },
+  {
+    id: 'sum-two',
+    topic: 'input',
+    prompt: 'Ask for two numbers with int(), then print their sum.',
+    starter: '',
+    solution: 'a = int(input("First number: "))\nb = int(input("Second number: "))\nprint("Sum:", a + b)\n',
+    checks: [
+      { label: 'Asks for both numbers', expect: ['First number: ', 'Second number: '] },
+      { label: 'Runs without errors', expect: ['First number: '], forbidError: true },
+    ],
+  },
+  {
+    id: 'product-two',
+    topic: 'input',
+    prompt: 'Ask for two numbers with int(), then print their product (multiply them).',
+    starter: '',
+    solution: 'a = int(input("First number: "))\nb = int(input("Second number: "))\nprint("Product:", a * b)\n',
+    checks: [
+      { label: 'Asks for both numbers', expect: ['First number: ', 'Second number: '] },
+      { label: 'Runs without errors', expect: ['First number: '], forbidError: true },
+    ],
+  },
+  {
+    id: 'double-number',
+    topic: 'input',
+    prompt: 'Ask for a number, then print its double (multiply it by 2).',
+    starter: '',
+    solution: 'n = int(input("Type a number: "))\nprint("Double:", n * 2)\n',
+    checks: [
+      { label: 'Asks for a number', expect: ['Type a number: '] },
+      { label: 'Runs without errors', expect: ['Type a number: '], forbidError: true },
+    ],
+  },
+  {
+    id: 'name-age-ten',
+    topic: 'input',
+    prompt: 'Ask for the player’s name and age, then print one f-string line: "<name> will be <age + 10> in ten years."',
+    starter: '',
+    solution:
+      'name = input("What is your name? ")\nage = int(input("How old are you? "))\nprint(f"{name} will be {age + 10} in ten years.")\n',
+    checks: [
+      { label: 'Asks for name and age', expect: ['What is your name? ', 'How old are you? '] },
+      { label: 'Runs without errors', expect: ['What is your name? '], forbidError: true },
+    ],
+  },
+  {
+    id: 'pizza-slices',
+    topic: 'input',
+    prompt: 'Ask for the number of friends and the slices each one gets, then print the total slices.',
+    starter: '',
+    solution:
+      'friends = int(input("How many friends? "))\nslices_each = int(input("How many slices each? "))\nprint("Total slices:", friends * slices_each)\n',
+    checks: [
+      { label: 'Asks for friends and slices', expect: ['How many friends? ', 'How many slices each? '] },
+      { label: 'Runs without errors', expect: ['How many friends? '], forbidError: true },
+    ],
+  },
+  {
+    id: 'minutes-hours',
+    topic: 'input',
+    prompt: 'Ask for a number of minutes, then print how many whole hours it makes (use //) and how many minutes are left over (use %).',
+    starter: '',
+    solution:
+      'minutes = int(input("How many minutes? "))\nprint("Hours:", minutes // 60)\nprint("Minutes left:", minutes % 60)\n',
+    checks: [
+      { label: 'Asks for minutes', expect: ['How many minutes? '] },
+      { label: 'Runs without errors', expect: ['How many minutes? '], forbidError: true },
+    ],
+  },
+  {
+    id: 'animal-repeat',
+    topic: 'input',
+    prompt: 'Ask for a number and an animal, then print the animal name repeated that many times with * (example: 3 and "cat" prints catcatcat).',
+    starter: '',
+    solution: 'times = int(input("How many times? "))\nanimal = input("What animal? ")\nprint(animal * times)\n',
+    checks: [
+      { label: 'Asks for a number and an animal', expect: ['How many times? ', 'What animal? '] },
+      { label: 'Runs without errors', expect: ['How many times? '], forbidError: true },
+    ],
+  },
+  {
     id: 'average',
     topic: 'numbers',
     prompt: 'Print the average of three grades, rounded to one decimal.',
@@ -155,8 +268,10 @@ export function Practice() {
           Drills
         </h1>
         <p className="mt-2 max-w-2xl text-base leading-relaxed text-ink-600">
-          Short, self-contained problems across everything in Module 1. No progress is
-          recorded here — this is for deliberate repetition.
+          Short, self-contained problems across everything in Module 1 — printing,
+          variables, input(), math, and more. When a drill uses input(), the program
+          waits for you to type the answer in the console. No progress is recorded
+          here — this is for deliberate repetition.
         </p>
       </header>
 

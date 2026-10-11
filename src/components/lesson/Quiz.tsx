@@ -10,10 +10,13 @@ export function Quiz({
   slug,
   questions,
   onFinish,
+  instantFeedback = false,
 }: {
   slug: string
   questions: QuizQuestion[]
   onFinish: (correct: number, total: number) => void
+  /** When true, each question reacts the moment an option is picked. */
+  instantFeedback?: boolean
 }) {
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [checked, setChecked] = useState(false)
@@ -23,6 +26,18 @@ export function Quiz({
   const allAnswered = answered === questions.length
 
   function choose(index: number, option: number) {
+    if (instantFeedback) {
+      // One pick per question, revealed immediately.
+      if (answers[index] !== undefined) return
+      const next = { ...answers, [index]: option }
+      setAnswers(next)
+      if (Object.keys(next).length === questions.length) {
+        const score = questions.filter((q, i) => next[i] === q.answer).length
+        onFinish(score, questions.length)
+      }
+      return
+    }
+
     if (checked) return
     setAnswers((prev) => ({ ...prev, [index]: option }))
   }
@@ -37,6 +52,8 @@ export function Quiz({
     setChecked(false)
   }
 
+  const finished = instantFeedback ? allAnswered : checked
+
   return (
     <div className="rounded-2xl border border-ink-200/80 bg-surface p-5 shadow-card">
       <h2 className="text-lg font-semibold text-ink-900">Check your understanding</h2>
@@ -48,9 +65,10 @@ export function Quiz({
         {questions.map((question, qi) => {
           const chosen = answers[qi]
           const right = chosen === question.answer
+          const revealed = instantFeedback ? chosen !== undefined : checked
           return (
             <li key={question.prompt}>
-              <fieldset disabled={checked}>
+              <fieldset disabled={revealed}>
                 <legend className="mb-3 flex gap-2 text-[15px] font-medium text-ink-800">
                   <span className="font-mono text-ink-400 tabular-nums">{qi + 1}.</span>
                   <span>
@@ -63,8 +81,8 @@ export function Quiz({
                     const selected = chosen === oi
                     const isAnswer = oi === question.answer
                     let tone = 'border-ink-200 bg-surface hover:border-python-300 hover:bg-python-50/40'
-                    if (checked && isAnswer) tone = 'border-success-500 bg-success-50'
-                    else if (checked && selected) tone = 'border-danger-500 bg-danger-50'
+                    if (revealed && isAnswer) tone = 'border-success-500 bg-success-50'
+                    else if (revealed && selected) tone = 'border-danger-500 bg-danger-50'
                     else if (selected) tone = 'border-python-500 bg-python-50'
 
                     return (
@@ -78,10 +96,10 @@ export function Quiz({
                         <span>
                           <RichText text={option} />
                         </span>
-                        {checked && isAnswer ? (
+                        {revealed && isAnswer ? (
                           <Check className="size-4 shrink-0 text-success-600" aria-hidden="true" />
                         ) : null}
-                        {checked && selected && !isAnswer ? (
+                        {revealed && selected && !isAnswer ? (
                           <X className="size-4 shrink-0 text-danger-600" aria-hidden="true" />
                         ) : null}
                       </button>
@@ -90,7 +108,7 @@ export function Quiz({
                 </div>
               </fieldset>
 
-              {checked && chosen !== undefined ? (
+              {revealed && chosen !== undefined ? (
                 <motion.p
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -107,7 +125,23 @@ export function Quiz({
       </ol>
 
       <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-ink-200/70 pt-5">
-        {checked ? (
+        {instantFeedback ? (
+          finished ? (
+            <>
+              <p className="text-sm text-ink-600">
+                You scored <span className="font-semibold text-ink-900">{correct}</span> of{' '}
+                {questions.length}.
+              </p>
+              <Button variant="ghost" size="sm" onClick={retry} className="ml-auto">
+                Try again
+              </Button>
+            </>
+          ) : (
+            <span className="text-xs text-ink-400">
+              {answered} of {questions.length} answered
+            </span>
+          )
+        ) : checked ? (
           <>
             <p className="text-sm text-ink-600">
               You scored <span className="font-semibold text-ink-900">{correct}</span> of{' '}
@@ -129,7 +163,7 @@ export function Quiz({
         )}
       </div>
 
-      {checked ? (
+      {finished ? (
         <div className="mt-4">
           <ProgressBar
             value={questions.length === 0 ? 0 : correct / questions.length}
@@ -141,7 +175,7 @@ export function Quiz({
       ) : null}
 
       <p className="sr-only" aria-live="polite">
-        {checked ? `Quiz scored ${correct} out of ${questions.length} for ${slug}.` : ''}
+        {finished ? `Quiz scored ${correct} out of ${questions.length} for ${slug}.` : ''}
       </p>
     </div>
   )

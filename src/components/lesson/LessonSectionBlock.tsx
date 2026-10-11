@@ -96,7 +96,51 @@ export function LessonSectionBlock({ section }: { section: LessonSection }) {
         <RichText text={section.body} />
       </div>
 
+      {section.table ? (
+        <div className="overflow-x-auto rounded-xl border border-ink-200">
+          <table className="w-full border-collapse text-left text-[15px]">
+            <thead className="bg-ink-50 text-ink-600">
+              <tr>
+                {section.table.headers.map((header) => (
+                  <th
+                    key={header}
+                    scope="col"
+                    className="px-3 py-2 font-semibold whitespace-nowrap"
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {section.table.rows.map((row, rowIndex) => (
+                <tr key={rowIndex} className="border-t border-ink-200/70">
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} className="px-3 py-2 text-ink-700">
+                      <RichText text={cell} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+
       {section.code ? <CodeBlock code={section.code} /> : null}
+
+      {section.output ? (
+        <figure className="overflow-hidden rounded-xl border border-ink-800 bg-ink-900 shadow-soft">
+          <figcaption className="border-b border-ink-800 bg-ink-950/60 px-3 py-2">
+            <span className="font-mono text-[11px] font-semibold tracking-wide text-ink-400 uppercase">
+              {section.output.title ?? 'What happens?'}
+            </span>
+          </figcaption>
+          <pre className="scroll-thin overflow-x-auto px-4 py-3 font-mono text-[13px] leading-6 text-ink-100">
+            <code>{section.output.text}</code>
+          </pre>
+        </figure>
+      ) : null}
 
       {section.list ? (
         <ul className="flex flex-col gap-2">

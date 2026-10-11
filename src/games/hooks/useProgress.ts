@@ -25,13 +25,54 @@ const emptyLesson = (): LessonProgress => ({
   values: {},
 })
 
+/**
+ * Older lesson ids that were merged/renamed. Key = old saved key, value = the
+ * key to keep now. Existing progress is carried over so nothing is lost.
+ */
+const LEGACY_LESSON_IDS: Record<string, string> = {
+  '03-guess-my-number': '09-guess-my-number-simple',
+}
+
+function mergeMax(a: Record<string, number>, b: Record<string, number>): Record<string, number> {
+  const out = { ...a }
+  for (const [key, value] of Object.entries(b)) {
+    out[key] = Math.max(out[key] ?? 0, value)
+  }
+  return out
+}
+
+function migrateStore(store: Store): Store {
+  let changed = false
+  const next = { ...store }
+  for (const [oldId, newId] of Object.entries(LEGACY_LESSON_IDS)) {
+    const old = next[oldId]
+    if (!old) continue
+    const current = next[newId]
+    next[newId] = current
+      ? {
+          completedLevels: { ...old.completedLevels, ...current.completedLevels },
+          levelStars: mergeMax(old.levelStars, current.levelStars),
+          lessonStars: Math.max(old.lessonStars, current.lessonStars),
+          lessonComplete: old.lessonComplete || current.lessonComplete,
+          values: { ...old.values, ...current.values },
+        }
+      : old
+    delete next[oldId]
+    changed = true
+  }
+  return changed ? next : store
+}
+
 function readStore(): Store {
   if (typeof window === 'undefined') return {}
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (!raw) return {}
     const parsed = JSON.parse(raw) as Store
-    return typeof parsed === 'object' && parsed !== null ? parsed : {}
+    if (typeof parsed !== 'object' || parsed === null) return {}
+    const migrated = migrateStore(parsed)
+    if (migrated !== parsed) writeStore(migrated)
+    return migrated
   } catch {
     return {}
   }
